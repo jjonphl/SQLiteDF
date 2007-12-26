@@ -1,0 +1,3 @@
+- cbind, named columns
+- [<-.sqlite.vector
+- R_CheckUserInterrupt() on sqlite code

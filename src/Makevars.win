@@ -1,0 +1,2 @@
+PKG_CPPFLAGS=-ISQLite
+PKG_LIBS=-LSQLite -lsqlite3

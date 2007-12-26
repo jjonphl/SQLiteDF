@@ -1,0 +1,25 @@
+# This is a hand-written shell script
+
+cd src
+echo "---- unpacking SQLite ----"
+rm -rf SQLite
+tar zxf ../sqlite-3.3.13.tar.gz
+mv sqlite-3.3.13 SQLite
+cd SQLite
+echo "---- configuring SQLite ----"
+## remove chmod, change to ls
+sed -e 's/chmod +x/ls /g; s/chmod u+w/ls /g; s/chmod \d\{3\}/ls /g; s/chmod/ls /g' configure > configure.tmp
+mv configure.tmp configure
+export CONFIG_SHELL=sh
+sh configure --build=i386-pc-mingw32 --disable-shared
+echo "---- making SQLite ----"
+mv src/sqliteInt.h src/sqliteInt.h.temp
+sed -e 's/MAX_ATTACHED 10/MAX_ATTACHED 31/' src/sqliteInt.h.temp > src/sqliteInt.h
+## most lines have '$(NAWK)', but one has 'awk'
+sed -e 's+./libtool+ sh libtool+' -e's/awk -f /gawk -f/' Makefile > Makefile.tmp
+## for some reason opcodes.h gets made incorrectly
+#make -f Makefile.tmp parse.c opcodes.c
+#cp ../win/opcodes.h opcodes.h
+#touch opcodes.h
+make -f Makefile.tmp
+cp .libs/libsqlite3.a .

@@ -1,0 +1,230 @@
+2007-09-30 (0.1.30)
+- fixed for R 2.6.0+ and devel: CHAR_ELT() now returns const char*, removed
+CR in src/Makevars.in
+
+2007-07-11 (0.1.30)
+- fix for changes in formals() in latest R-devel (cannot do formals() directly
+on primitive functions like log(), has to do formals(args(log)) )
+- fixed renameSdf documentation
+
+2007-07-10 (0.1.27-0.1.29)
+- created method _make_row_index(), similar to R that creates an index
+vector, so that methods no longer have to consider the type of passed index
+- added [<-.sqlite.vector, tests for that
+- fix builds for windows, *bsd (mac)
+
+2007-02-18 (0.1.26)
+- updated to sqlite-3.3.13
+- added R function sdfSelect, added tests for that
+- fixes & enhancements on _get_factor_levels1, _get_vector_index_typed_result,
+etc.
+
+2006-10-03 (17:45 Manila, 0.1.25)
+- fixed 0.1.24 warnings (errors in R/All.R)
+- used sqlite context on aggregates. somehow, sizeof on struct with long
+double worked. have to look out for that. 
+
+2006-09-25 (18:50 Manila)
+- inlined _expand_buf
+- fixed sql buffer resizing in sdf_get_index
+- added sdflm2
+
+2006-09-20 (18:50 Manila)
+- new sqlite.vector(vec), creates a 1-column sdf from a vector
+- sqlite.matrix : dimnames, [, other experimental stuff
+- sort.sqlite.vector sorts to a table to the sdf, no more creating a new
+sdf
+ 
+2006-09-06 (09:55 Manila)
+- fixed linux configure script (add #include <unistd> in src/SQLite/tool/lemon.c)
+- removed warnings, errors in configure.win (sh again, "uninitialized" vars)
+
+2006-09-03 (15:34 Manila)
+- moved default data dir to ./.SQLiteDF
+- "generalized" sqlite vector, in that any table column can be used as an
+sqlite.vector (previously, only columns of table sdf_data)
+- fixed sqlite.matrix rownames
+
+2006-08-28 (08:00 Manila)
+- added sqlite.matrix and some of its methods
+- fixed print.sqlite.data.frame bug
+- added msg when an existing workspace.db is loaded
+
+2006-08-27 (05:30 Manila)
+- added sed script in configure.win to change chmod to ls
+
+2006-08-24 (20:05 Manila)
+- moved quantile.default to version conditional
+- removed sqlite.matrix export
+
+2006-08-23 (10:27 Manila)
+- added mean.sqlite.vector, fixed summary.sqlite.vector, added
+summary.sqlite.data.frame
+- is.list.sqlite.vector === FALSE
+- fixed version conditionals for generic sort
+- fixed sdfImportSQLite, added test case
+- fixed _copy_factor_levels2
+- checked on linux (R-2.3.0, R-devel)
+
+2006-08-23 (10:27 Manila)
+- added [], [n], [,] indexing for sdf. added tests for those
+- added Prof. Bates print.sqlite.data.frame with modifications,
+print.sqlite.vector
+- changed inameSdf to return filename too
+- changed some Rprintf to error() and warning()
+- added doc for rbindSdf
+- fixed bug in sort.sqlite.vector
+- fixed bug in sdf_get_index, where a new sdf is added to the workspace twice
+(one in _create_sdf_skeleton2 and another in sdf_get_index)
+- sort() still does not work for 2.3.x (not generic)
+
+2006-08-23 (00:20 Manila)
+- added all.equal.sqlite.vector
+- added == for character
+- updated test script
+- used conditional on NAMESPACE for sort
+- R CMD check runs for me in linux (R-devel, R-2.3.0), windows (R-2.3.0)
+
+2006-08-22 (19:45 Manila)
+- removed rbind S3, replaced with rbindSdf()
+- fixed rbindSdf() for devel
+- fixed a couple of sqlite.vector functions that still does "inheritance"
+- re-added DBI in depends because it has no namespace and DBI::: does not work
+- added head(), tail(). however both do not follow the original's row names yet
+- added optional tests for sdfImportDBI, rbindSdf
+- added doc for typeSvec, has.typeSvec
+- runs for me in both R-devel, R-2.3.1
+
+2006-08-22 (10:45 Manila)
+- sqlite.data.frame now does not inherit from data.frame
+- sqlite.vector does not inherit from the builtin data types
+- added attribute sdf.vector.type to hold the type of sqlite.vector
+- commented out summary() tests in tests.R, added tests n classes of sdf's
+- added function typeSvec and is.typeSvec to query type of sqlite.vector
+- fixed row.names comparison. I guess I put that before checking in and after
+  running tests, because ==.sqlite.vector is not implemented, only Ops.sqlite.vector.
+- updated version to 0.1.13
+
+2006-08-21 (9:30 Manila)
+- added symbols SDF_RowNamesSymbol, SDF_DimSymbols, SDF_DimNamesSymbols. SDF
+  row names is now attached to SDF_RowNamesSymbol ("sdf.row.names")
+- added row.names.sqlite.data.frame
+- added src/win/opcode.h
+- used ScalarLogical(), ScalarInteger(), ...
+- removed ";" in All.R
+- removed eval()
+- made configure, cleanup executable
+
+2006-08-20 (6:35 Manila)
+- configure file fixes from Prof. Ripley
+- added native routines registration
+
+2006-08-20 (00:32 Manila)
+- added docs in HACKING
+- fixed latex error on sqlite.data.frame.Rd
+- changed configure to copy libsqlite3.la to SQLite/ (like configure.win)
+- finished Ops (%%, %/%), and (round, signif, log)
+- fixed bug on operand order for Ops
+- added test cases
+
+2006-08-19 (9:39 Manila time)
+- added configure files from Prof. Ripley
+- added documentations for inameSDF, sdfImportSQLite, sdfImportDBI, sdflm.
+- added HACKING notes
+- added list of functions known to work in SQLiteDF.package.Rd
+- changed sqlite_vector accumulator to long double, fixed the accuracy problem
+
+2006-08-18  Douglas Bates  <bates@R-project.org>
+       * R/All.R (with.sqlite.data.frame, summary.sqlite.vector,
+       as.logical.sqlite.vector, as.integer.sqlite.vector,
+       as.double.sqlite.vector): Modify calling sequence of S3 methods to
+       correspond to generic.
+       * man/sqlite.data.frame.Rd: add keywords
+
+2006-08-18 (6:05pm Manila time)
+- fixed R-devel tests failure
+- removed Depends on biglm, DBI. used namespace qualifiers 
+- added ChangeLog
+- added tests on summary
+- added version in DESCRIPTION, starting at 0.1.11
+
+2006-08-17
+- fix on USE_SDF1 bug, when a function uses 2 sdf's the 1st may be unloaded 
+  because of low use count
+- fix on transactions
+- started implementing sqlite.matrix
+- commented out parts of the test that fails due to "minor technicalities" (precision, NA). will test them again...
+- summary works, almost the same as original df except for NA handling
+
+2006-08-11
+- added sdflm, as.data.frame.sdf, eval, sdfImportDBI, sdfImportSQLite
+- added Requires DBI, biglm in DESCRIPTION
+- corrected generic-ized is.list, length (already generic)
+- added "begin", "commit" in sdf_create_sdf, rbind, and row ops. absence of
+  which was the cause of the slowness
+- factored out _prepare_attach2() w/c checks the # of attached sqlite db's
+  and detaches as necessary.
+- fixed bug on detecting R character type, STRSXP instead of CHARSXP
+- added utility _str_tolower(), file name & line number in _sqlite_error
+- override stats::quantile env
+- change Makevars to link statically
+
+2006-08-01
+- added methods is.list and as.list to sdf's. lapply (sapply) now works
+- rbind(sdf, df) works, however no "labeled" rbind
+- finished Op group (%% & %/% implemented wrongly for now...)
+- with.sqlite.data.frame is already working
+- sort.sqlite.vector() is working
+- renamed USE_SDF to USE_SDF1, restricted it to only use buf1 and below.
+  there was something affected by this, which calls USE_SDF twice (initially
+  i thought it would only be used on top of funcs, so using all buffers is
+  ok. if you use it in the middle of the func, it would overwrite all buffers).
+- fixed sdf_get_row_count, _create_svector1 (renamed from *2, added ordered),
+  renamed _create_sdf_skeleton2 to skeleton1 because it uses USE_SDF1,
+  changed _get_row_count2 to have quoted and non-quoted option
+- added tests
+
+2006-07-17
+- added documentation
+- finished Summary group, cummulative stuffs in Math group for sqlite.vector
+- revised tests to use stop()
+- started rbind for data frames
+
+2006-07-10
+- added windows dll's, Makevar.win. windows dll still has the default 10 max
+  attached db
+- added USE_SDF, w/c does the juggling of which db to be attached
+
+2006-07-10
+- moved libsqlite3.* to inst/sqlite/linux, added inst/sqlite/win to have
+  sqlite windows static dll
+- change libsqlite3.a to have 31 max attach-ed db's
+- most of Math.sqlite.vector is working already
+- fixed sdf_attach_sdf
+- factored out creation of sdf in _create_sdf_skeleton2
+- added dupSdf, renameSdf
+
+2006-07-05
+- Added test script
+- Fixed compile error for Ubuntu dapper (?), as tested by Mr. Medri. 
+
+2006-07-04
+- fixed lots of monstrous bugs introduced by refactoring stuffs
+- fixed R CMD check errors on documentation
+
+2006-07-04
+- added row.names support for sdf
+- -pedantic cleanups
+- fixes by Prof. Bates: duplicate include & sqlite3_stmt mis-declaration
+- minor fixes
+
+2006-06-27
+- added sqlite.vector, its indexers, length and conversion to ordinary vec
+- indexers for sqlite.data.frame: [, [[, $
+- attachSdf, detachSdf
+
+2006-06-26
+1st submit
+
+
+

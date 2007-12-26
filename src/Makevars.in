@@ -1,0 +1,2 @@
+PKG_CPPFLAGS=-ISQLite
+PKG_LIBS=SQLite/.libs/libsqlite3.a @TLIBS@
