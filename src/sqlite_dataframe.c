@@ -856,6 +856,53 @@ SEXP sdf_get_index(SEXP sdf, SEXP row, SEXP col, SEXP new_sdf) {
         }
 
         UNPROTECT(1); /* for the ret from _setup_df_sexp1 */
+    } else if (IS_CHARACTER(row)) {
+        const char *str_index;
+        sqlite3_finalize(stmt);
+
+        sprintf(g_sql_buf[1], "[%s].sdf_data", iname);
+        row_cnt = _get_row_count2(g_sql_buf[1], 0);
+
+        /* append " where [row name]=?" to the formed select statement */
+        _expand_buf(0, buflen+20);
+        buflen += sprintf(g_sql_buf[0]+buflen, " where [row name]=?");
+
+        str_index = CHAR(STRING_ELT(row, 0));
+
+        res = sqlite3_prepare(g_workspace, g_sql_buf[0], -1, &stmt, 0);
+        if (_sqlite_error(res)) return R_NilValue;
+
+        sqlite3_bind_text(stmt, 1, str_index, -1, SQLITE_STATIC);
+        res = sqlite3_step(stmt);
+
+        /* create data frame */
+        ret = _setup_df_sexp1(stmt, iname, col_index_len, idxlen, dup_indices);
+        if (ret == R_NilValue) { sqlite3_finalize(stmt); return R_NilValue; }
+
+        /* put data in it */
+        if (index >= 0 && index < row_cnt) {
+            _add_row_to_df(ret, stmt, row_index_len++, col_index_len);
+        }
+
+        for (i = 1; i < idxlen; i++) {
+            sqlite3_reset(stmt);
+            str_index = CHAR(STRING_ELT(row, i));
+            if (index >= 0 && index < row_cnt) {
+                sqlite3_bind_text(stmt, 1, str_index, -1, SQLITE_STATIC);
+                res = sqlite3_step(stmt); 
+                _add_row_to_df(ret, stmt, row_index_len++, col_index_len);
+            }
+        }
+        sqlite3_finalize(stmt);
+
+        /* shrink vectors */
+        if (row_index_len < idxlen) {
+            for (i = 0; i < col_index_len; i++) {
+                SET_VECTOR_ELT(ret, i, 
+                        _shrink_vector(VECTOR_ELT(ret, i), row_index_len));
+            }
+        }
+        UNPROTECT(1); /* for the ret from _setup_df_sexp1 */
     }
 
     UNUSE_SDF2(iname);
