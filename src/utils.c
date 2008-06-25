@@ -290,7 +290,7 @@ SEXP _shrink_vector(SEXP vec, int len) {
     if (vec == R_NilValue) return vec;
     else if (origlen > len) {
         int type = TYPEOF(vec), i;
-        if (type == CHARSXP) {
+        if (type == CHARSXP || type == STRSXP) {
             PROTECT(ret = NEW_CHARACTER(len));
             for (i = 0; i < len; i++) {
                 SET_STRING_ELT(ret, i, STRING_ELT(vec, i));
