@@ -621,6 +621,9 @@ SEXP sdf_get_index(SEXP sdf, SEXP row, SEXP col, SEXP new_sdf) {
             _expand_buf(0, buflen+20+strlen(iname));
             buflen += sprintf(g_sql_buf[0]+buflen, " from [%s].sdf_data", iname);
         }
+    /*} else if (IS_CHARACTER(col)) {
+        for (i = 0; i < idxlen; i++) {
+        }*/
     } else {
         sqlite3_finalize(stmt);
         error("don't know how to handle column index.\n");
@@ -1260,7 +1263,6 @@ SEXP sdf_select(SEXP sdf, SEXP select, SEXP where, SEXP limit, SEXP debug) {
 
             if (idx < nrows) {
                 row_names = _shrink_vector(row_names, idx);
-                Rprintf("row_names length: %d, type: %d, CHRSXP: %d\n", LENGTH(row_names), TYPEOF(row_names), CHARSXP);
                 for (int i = 0; i < len; i++) {
                     SET_VECTOR_ELT(ret, i, 
                             _shrink_vector(VECTOR_ELT(ret, i), idx));

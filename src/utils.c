@@ -58,16 +58,22 @@ int _check_sql_buf(int i) {
     return ret;
 } 
 
-R_INLINE void  _expand_buf(int i, int size) {
+/*R_INLINE*/ void  _expand_buf(int i, int size) {
     if (size >= g_sql_buf_sz[i]) {
-        g_sql_buf_sz[i] *= 2;
-        g_sql_buf[i] = Realloc(g_sql_buf[i], g_sql_buf_sz[i], char);
-        /* return TRUE; */
+        char *new_buf;
+        int new_size = g_sql_buf_sz[i] * 2;
+        if (size > new_size) new_size = size;
+        Rprintf("Reallocating buffer (%d): %d\n", i, new_size);
+        new_buf = Realloc(g_sql_buf[i], new_size, char);
+
+        if (new_buf != NULL) {
+            g_sql_buf[i] = new_buf;
+            g_sql_buf_sz[i] = new_size;
+        }
     }
-    /* return expanded; */
 }
 
-R_INLINE int _sqlite_error_check(int res, const char *file, int line) {
+/*R_INLINE*/ int _sqlite_error_check(int res, const char *file, int line) {
     int ret = FALSE;
     if (res != SQLITE_OK) { 
         Rprintf("SQLITE ERROR (line %d at %s): %s\n", line, file, sqlite3_errmsg(g_workspace));
@@ -127,8 +133,9 @@ char *_get_full_pathname2(const char *relpath) {
     } else {
         while (TRUE) {
             tmp1 = getcwd(g_sql_buf[2], g_sql_buf_sz[2]);
-            if (tmp1 == NULL) _expand_buf(2, g_sql_buf_sz[2]+1);
-            else { 
+            if (tmp1 == NULL) {
+                _expand_buf(2, g_sql_buf_sz[2]+1);
+            } else { 
                 buflen = strlen(tmp1); 
                 strcpy(g_sql_buf[2]+buflen,"/");
                 buflen += 1;

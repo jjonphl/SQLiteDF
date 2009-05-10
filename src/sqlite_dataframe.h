@@ -84,7 +84,7 @@ void _init_sqlite_function_accumulator();
 int *_make_row_index(SEXP idx, int *plen);
 
 /* global buffer (g_sql_buf) utilities */
-R_INLINE void _expand_buf(int i, int size);  /* expand ith buf if size > buf[i].size */
+/*R_INLINE*/ void _expand_buf(int i, int size);  /* expand ith buf if size > buf[i].size
 
 
 /* workspace utilities */
@@ -119,6 +119,15 @@ void __register_vector_math();
 #define SDF_INAME(sdf) CHAR(STRING_ELT(_getListElement(sdf, "iname"),0))
 #define SVEC_TBLNAME(sdf) CHAR(STRING_ELT(_getListElement(sdf, "tblname"),0))
 #define SVEC_VARNAME(sdf) CHAR(STRING_ELT(_getListElement(sdf, "varname"),0))
+
+/* formerly R_INLINE-d functions */
+/* define _expand_buf(i, size) { \
+    if ((size) >= g_sql_buf_sz[i]) { \
+        g_sql_buf_sz[i] *= 2; \
+        g_sql_buf[i] = Realloc(g_sql_buf[i], g_sql_buf_sz[i], char); \
+    } \
+} */
+
 
 /* possible var types when stored in sqlite as integer */
 #define VAR_INTEGER 0

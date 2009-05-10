@@ -4,6 +4,8 @@
 #define __SQLITE_WORKSPACE__
 #include "sqlite_dataframe.h"
 
+#define INIT_BUF_SZ 1024
+
 /* global variables */
 sqlite3 *g_workspace = NULL;
 char *g_sql_buf[NBUFS];
@@ -172,7 +174,8 @@ SEXP sdf_init_workspace() {
     /* initialize sql_buf */
     for (i = 0; i < NBUFS; i++) {
         if (g_sql_buf[i] == NULL) {
-            g_sql_buf_sz[i] = 1024;
+            g_sql_buf_sz[i] = INIT_BUF_SZ;
+            Rprintf("Initializing buffer %d with %d bytes\n", i, g_sql_buf_sz[i]);
             g_sql_buf[i] = Calloc(g_sql_buf_sz[i], char);
         }
     }
