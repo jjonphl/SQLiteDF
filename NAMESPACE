@@ -68,3 +68,4 @@ S3method(Ops, sqlite.matrix)
 
 #S3method(coef, sdflm)
 S3method(update, sdflm)
+S3method(summary, sdflm)

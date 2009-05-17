@@ -1,0 +1,7 @@
+.SQLiteDF
+*.swp
+src/*.o
+src/*.so
+src/sqlite-3*
+src/SQLite
+src/Makevars

@@ -211,6 +211,16 @@ sdflm2 <- function(x, y, intercept=TRUE) {
     rval
 }
 
+summary.sdflm <- function(object,...){
+    beta<-coef(object)
+    se<-sqrt(diag(vcov(object)))
+    mat<-cbind(`Coef`=beta, `(95%`=beta-2*se, `CI)`=beta+2*se, `SE`=se,
+               `p`=2*pnorm(abs(beta/se),lower.tail=FALSE))
+    rownames(mat)<-object$names
+    rval<-list(obj=object, mat=mat)
+    class(rval)<-c("summary.sdflm", "summary.biglm")
+    rval
+}
 
 # -------------------------------------------------------------------------
 # S3 methods for sqlite.data.frame
