@@ -1,3 +1,7 @@
+2009-05-18 (0.1.34)
+- fixed summary.sdflm (summary.biglm 0.7 has additional term attrib)
+- added macro debug() instead of Rprintf
+
 2008-06-22 (0.1.32)
 - added [.sqlite.data.frame for row.names
 
