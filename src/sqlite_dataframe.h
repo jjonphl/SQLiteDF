@@ -105,6 +105,12 @@ void __register_vector_math();
 #define _sqlite_error(res) _sqlite_error_check((res), __FILE__, __LINE__)
 
 #ifdef __SQLITE_DEBUG__
+#define debug(fmt, args...) Rprintf(fmt, ## args)
+#else
+#define debug(fmt, args...) 
+#endif
+
+#ifdef __SQLITE_DEBUG__
 #define _sqlite_begin  { _sqlite_error(_sqlite_exec("begin")); Rprintf("begin at "  __FILE__  " line %d\n",  __LINE__); }
 #define _sqlite_commit  { _sqlite_error(_sqlite_exec("commit")); Rprintf("commit at "  __FILE__  " line %d\n",  __LINE__); }
 #else

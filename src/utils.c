@@ -63,7 +63,7 @@ int _check_sql_buf(int i) {
         char *new_buf;
         int new_size = g_sql_buf_sz[i] * 2;
         if (size > new_size) new_size = size;
-        Rprintf("Reallocating buffer (%d): %d\n", i, new_size);
+        debug("Reallocating buffer (%d): %d\n", i, new_size);
         new_buf = Realloc(g_sql_buf[i], new_size, char);
 
         if (new_buf != NULL) {

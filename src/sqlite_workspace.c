@@ -175,7 +175,7 @@ SEXP sdf_init_workspace() {
     for (i = 0; i < NBUFS; i++) {
         if (g_sql_buf[i] == NULL) {
             g_sql_buf_sz[i] = INIT_BUF_SZ;
-            Rprintf("Initializing buffer %d with %d bytes\n", i, g_sql_buf_sz[i]);
+            debug("Initializing buffer %d with %d bytes\n", i, g_sql_buf_sz[i]);
             g_sql_buf[i] = Calloc(g_sql_buf_sz[i], char);
         }
     }
