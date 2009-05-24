@@ -11,14 +11,6 @@ export(typeSvec, has.typeSvec)
 
 importFrom(utils, head, tail)
 
-# since Depends: R (>= 2.3.0) already, check pre 2.4.0 only
-if (paste(R.version$major, R.version$minor, sep=".") < "2.4.0") {
-    export(sort, median)      # uses quantile, w/c uses sort()
-    S3method(sort, default)
-    export(quantile.default)  # to use sort()
-    importFrom(stats, quantile.default)
-}
-
 S3method(names, sqlite.data.frame)
 S3method(length, sqlite.data.frame)
 S3method(row.names, sqlite.data.frame)

@@ -163,23 +163,6 @@ sdfSelect <- function(sdf, select=NULL, where=NULL, limit=NULL, debug=FALSE) {
     
 
 # -------------------------------------------------------------------------
-# overriden primitives
-# -------------------------------------------------------------------------
-ver = paste(R.version$major, R.version$minor[1], sep=".")
-if (ver < "2.4.0") {
-    sort.default <- base::sort 
-    sort <- function(x, ...) UseMethod("sort")
-    formals(sort.default) <- c(formals(sort.default), alist(...=))
-    
-    # to make use of sort()
-    median <- function(x, na.rm=FALSE) as.numeric(quantile(x, 0.5, na.rm=na.rm))
-
-    # to get generic sort
-    environment(quantile.default) <- .GlobalEnv
-}
-
-
-# -------------------------------------------------------------------------
 # biglm stuffs
 # -------------------------------------------------------------------------
 sdflm <- function(formula, sdf, batch.size=1024) {
