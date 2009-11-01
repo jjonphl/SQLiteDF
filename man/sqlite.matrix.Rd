@@ -17,7 +17,7 @@ Creates an SDF with 1 column named V1. The \emph{mode} of the matrix
 is determined from the data, much like \code{as.matrix} does. It
 is similar to a \code{sqlite.vector} and has the additional attributes
 \code{sdf.dim} and \code{sdf.dimnames} comparable to \code{matrix}'s
-\code{dim} and {dimnames} attributes.
+\code{dim} and \code{dimnames} attributes.
 
 Internally, it has extra tables \emph{sdf\_matrix\_rownames} which holds
 the row names (and implicitly the row count), and \emph{sdf\_matrix\_colnames} 
